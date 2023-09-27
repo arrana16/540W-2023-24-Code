@@ -1,3 +1,4 @@
+#include "lemlib/chassis/chassis.hpp"
 #include "main.h"
 #include "lemlib/api.hpp"
 
@@ -15,3 +16,4 @@ lemlib::Drivetrain_t drivetrain {
     200
 };
 
+lemlib::Chassis chassis();
