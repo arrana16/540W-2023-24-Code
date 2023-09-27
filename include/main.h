@@ -35,6 +35,12 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
+#include "okapi/api.hpp"
+#include "lemlib/api.hpp"
+#include "drivetrain/setup.hpp"
+#include "miscellaneous/globals.hpp"
+#include "miscellaneous/PID.hpp"
+
 
 /**
  * You should add more #includes here

@@ -1,6 +1,4 @@
-#include "lemlib/chassis/chassis.hpp"
 #include "main.h"
-#include "lemlib/api.hpp"
 
 pros::Motor l1(1, pros::E_MOTOR_GEARSET_18, false);
 pros::Motor r1(2, pros::E_MOTOR_GEARSET_18, false);
@@ -40,3 +38,6 @@ lemlib::ChassisController_t angularController {
 };
 
 lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensors);
+
+PID leftSidePID(2, 0,0, false, 0);
+PID rightSidePID(2, 0,0, false, 0);
