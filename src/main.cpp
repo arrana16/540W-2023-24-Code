@@ -85,8 +85,10 @@ void opcontrol() {
 		int left = master.get_analog(ANALOG_LEFT_Y);
 		int right = master.get_analog(ANALOG_RIGHT_Y);
 
-		left_mtr = left;
-		right_mtr = right;
+		int y = cont.get_analog(ANALOG_LEFT_Y);
+        int rot = cont.get_analog(ANALOG_RIGHT_X);
+
+		simpleDrive(y, rot);
 
 		pros::delay(20);
 	}

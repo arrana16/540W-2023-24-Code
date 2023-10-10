@@ -1,5 +1,8 @@
 #include "main.h"
 
+extern PID leftSidePID;
+extern PID rightSidePID;
+
 extern pros::Motor l1;
 extern pros::Motor r1;
 
