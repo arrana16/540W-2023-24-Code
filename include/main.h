@@ -41,6 +41,7 @@
 #include "miscellaneous/globals.hpp"
 #include "drivetrain/setup.hpp"
 #include "drivetrain/movement.hpp"
+#include "intake/setup.hpp"
 
 
 

@@ -1,8 +1,8 @@
 #include "main.h"
 
-extern int WHEELTRACK;
-extern int MAXLINVEL;
-extern int MAXANGVEL;
-extern int WHEEL_DIAMETER;
+extern double WHEELTRACK;
+extern double MAXLINVEL;
+extern double MAXANGVEL;
+extern double WHEEL_DIAMETER;
 
 extern pros::Controller cont;

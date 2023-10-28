@@ -1,4 +1,5 @@
 #include "main.h"
+#include "pros/misc.h"
 
 /**
  * A callback function for LLEMU's center button.
@@ -78,6 +79,10 @@ void opcontrol() {
 	pros::Motor left_mtr(1);
 	pros::Motor right_mtr(2);
 
+	int lasty= 0 ;
+	int limit = 10;
+	double exp = 2.12;
+
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
@@ -87,9 +92,38 @@ void opcontrol() {
 
 		int y = cont.get_analog(ANALOG_LEFT_Y);
         int rot = cont.get_analog(ANALOG_RIGHT_X);
+		
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)){
+			moveForward();
+		};
+
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)){
+			moveBackward();
+		};
+
+
+		if (y>=0){
+			y=(pow(y, exp)*127)/pow(127, exp);
+		} else {
+			y=(pow(abs(y), exp)*-127)/pow(127, exp);
+		}
+
+		if (rot>=0){
+			rot=(pow(rot, exp)*127)/pow(127, exp);
+		} else {
+			rot=(pow(abs(rot), exp)*-127)/pow(127, exp);
+		}
+
+		if (y-lasty>limit) {
+			y=lasty+limit;
+		} else if (y-lasty<-1*limit) {
+			y=lasty-limit;
+		}
+		
 
 		simpleDrive(y, rot);
 
+		lasty = y;
 		pros::delay(20);
 	}
 }
