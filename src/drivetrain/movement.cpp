@@ -1,6 +1,7 @@
 #include "main.h"
 
 //Great job gang
+//thanks gangy
 /* iiimmmmm*/
 
 void setVels(int linVel, int angVel) {
