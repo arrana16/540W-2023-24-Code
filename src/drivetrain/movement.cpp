@@ -1,4 +1,14 @@
 #include "main.h"
+#include <ctime>
+#include <iostream> 
+#include <fstream>  
+
+
+void analyzeFile(const std::string& fileName){
+    std::ifstream file(fileName);
+    int pathTime = 0; 
+    file >> pathTime; 
+}
 
 void setVels(int linVel, int angVel) {
     int leftVel = linVel - (angVel*WHEELTRACK/2);
