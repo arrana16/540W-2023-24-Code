@@ -81,7 +81,8 @@ void opcontrol() {
 
 	int lasty= 0 ;
 	int limit = 10;
-	double exp = 2.12;
+	double yexp = 2.12;
+	double rotexp = 2.8;
 
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
@@ -93,25 +94,43 @@ void opcontrol() {
 		int y = cont.get_analog(ANALOG_LEFT_Y);
         int rot = cont.get_analog(ANALOG_RIGHT_X);
 		
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)){
-			moveForward();
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
+			intake();
+		} else {
+			hold();
+		}
+
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+			outtake();
+		} else {
+			hold();
 		};
 
-		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)){
-			moveBackward();
+
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
+			hold();
 		};
 
+		if (!master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
+			load();
+		}
+
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
+			shoot();
+		};
+
+		
 
 		if (y>=0){
-			y=(pow(y, exp)*127)/pow(127, exp);
+			y=(pow(y, yexp)*127)/pow(127, yexp);
 		} else {
-			y=(pow(abs(y), exp)*-127)/pow(127, exp);
+			y=(pow(abs(y), yexp)*-127)/pow(127, yexp);
 		}
 
 		if (rot>=0){
-			rot=(pow(rot, exp)*127)/pow(127, exp);
+			rot=(pow(rot, rotexp)*127)/pow(127, rotexp);
 		} else {
-			rot=(pow(abs(rot), exp)*-127)/pow(127, exp);
+			rot=(pow(abs(rot), rotexp)*-127)/pow(127, rotexp);
 		}
 
 		if (y-lasty>limit) {

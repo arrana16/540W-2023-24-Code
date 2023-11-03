@@ -42,6 +42,8 @@
 #include "drivetrain/setup.hpp"
 #include "drivetrain/movement.hpp"
 #include "intake/setup.hpp"
+#include "intake/functions.hpp"
+#include "catapult/setup.h"
 
 
 
