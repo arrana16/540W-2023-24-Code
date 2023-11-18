@@ -1,6 +1,6 @@
 #include "main.h"
 
-pros::ADIDigitalIn limitSwitch (8);
+pros::ADIDigitalIn limitSwitch (7);
 void load(){
     if (!limitSwitch.get_value()){
         cata.move(100);
@@ -10,5 +10,5 @@ void load(){
 }
 
 void shoot(){
-    cata.move(100);
+    cata.move(110);
 }

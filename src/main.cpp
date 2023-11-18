@@ -28,6 +28,7 @@ void initialize() {
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
+	//autonomous();
 }
 
 /**
@@ -59,7 +60,39 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	/*
+	pros::ADIDigitalOut wings(8);
+
+	chassis.calibrate();
+	chassis.setPose(25.2, 12, -120);
+	
+	chassis.moveTo(30.4, 13, 2000, 70);
+	chassis.moveTo(42, 6, 2000, 70);
+
+	//chassis.turnTo(90, 0, 6000, false, 70);
+	chassis.moveTo(110, 6, 2000, 90);
+
+	chassis.moveTo(110, 33, 2000, 90);
+	chassis.moveTo(85, 72, 2000, 90);
+	chassis.turnTo(chassis.getPose().x+26, chassis.getPose().y, 2000, false, 90);
+	simpleDrive(-100, 0);
+	pros::delay(500);
+	simpleDrive(0, 0);
+	chassis.setPose(82, 72, 90);
+	wings.set_value(true);
+	chassis.moveTo(112, 72, 2000, 120);
+	*/
+	
+	
+	/*
+	pros::delay(500);
+	while (true){
+		cata.move(95);
+	}
+	*/
+
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -76,18 +109,22 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
 
 	int lasty= 0 ;
 	int limit = 10;
 	double yexp = 2.12;
-	double rotexp = 2.8;
+	double rotexp = 3.8;
+
+	pros::Imu inertial_seonsor(11);
+	pros::ADIDigitalOut wings(8);
 
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+		lemlib::Pose pose = chassis.getPose(); // get the current position of the robot
+        pros::lcd::print(0, "x: %f", pose.x); // print the x position
+        pros::lcd::print(1, "y: %f", pose.y); // print the y position
+        pros::lcd::print(2, "heading: %f", pose.theta);
+        pros::lcd::print(3, "heading: %f", inertial_seonsor.get_heading());
+
 		int left = master.get_analog(ANALOG_LEFT_Y);
 		int right = master.get_analog(ANALOG_RIGHT_Y);
 
@@ -102,7 +139,7 @@ void opcontrol() {
 
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
 			outtake();
-		} else {
+		} else if (!master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 			hold();
 		};
 
@@ -118,6 +155,12 @@ void opcontrol() {
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
 			shoot();
 		};
+
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
+			wings.set_value(true);
+		} if (master.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
+			wings.set_value(false);
+		}
 
 		
 
@@ -139,7 +182,20 @@ void opcontrol() {
 			y=lasty-limit;
 		}
 		
+		if (rot>90){
+			rot=90;
+		} else if (rot<-90){
+			rot=-90;
+		}
 
+		if (y>110){
+			y=110;
+		} else if (y<-110){
+			y=-110;
+		}
+		if (y>-3&&y<3) {
+			y=y-abs(rot)*0.2;
+		}
 		simpleDrive(y, rot);
 
 		lasty = y;

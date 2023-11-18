@@ -5,7 +5,7 @@ void intake(){
 }
 
 void outtake(){
-    intake1.move(-100);
+    intake1.move(-127);
 }
 
 void posess(){
@@ -15,3 +15,4 @@ void posess(){
 void hold(){
     intake1.move(0);
 }
+

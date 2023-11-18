@@ -10,6 +10,9 @@ void analyzeFile(const std::string& fileName){
     file >> pathTime; 
 }
 
+void mpDrive(std::string textFile){
+    
+};
 void setVels(int linVel, int angVel) {
     int leftVel = linVel - (angVel*WHEELTRACK/2);
     int rightVel = linVel - (angVel*WHEELTRACK/2);
