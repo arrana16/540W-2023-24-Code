@@ -53,9 +53,9 @@ lemlib::ChassisController_t angularController {
     3.3, // kP
     30, // kD
     0.5, // smallErrorRange
-    3000, // smallErrorTimeout
+    300, // smallErrorTimeout
     3, // largeErrorRange
-    5000, // largeErrorTimeout
+    500, // largeErrorTimeout
     0 // slew rate
 };
 
