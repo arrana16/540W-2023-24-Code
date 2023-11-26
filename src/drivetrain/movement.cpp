@@ -9,7 +9,7 @@ void analyzeFile(const std::string& fileName){
     int pathTime = 0; 
     file >> pathTime;
 
-    int clock = clock() 
+    //int clock = clock() 
 }
 
 void mpDrive(std::string textFile){

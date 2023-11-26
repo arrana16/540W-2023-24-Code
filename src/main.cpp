@@ -28,7 +28,7 @@ void initialize() {
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
-	//autonomous();
+	chassis.calibrate();
 }
 
 /**
@@ -61,6 +61,8 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
+
+	right_side_auto();
 	/*
 	pros::ADIDigitalOut wings(8);
 
@@ -111,12 +113,16 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 	int lasty= 0 ;
-	int limit = 10;
+	int limit = 2;
 	double yexp = 2.12;
 	double rotexp = 3.8;
 
+	bool cataShoot = true;
+
 	pros::Imu inertial_seonsor(11);
-	pros::ADIDigitalOut wings(8);
+	pros::ADIDigitalOut wings(7, LOW);
+	pros::ADIDigitalOut lift(8, LOW);
+
 
 	while (true) {
 		lemlib::Pose pose = chassis.getPose(); // get the current position of the robot
@@ -148,18 +154,27 @@ void opcontrol() {
 			hold();
 		};
 
-		if (!master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
-			load();
-		}
 
-		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)&&true){
 			shoot();
-		};
+		} else {
+			cata.move(0);
+		}
+		
 
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
 			wings.set_value(true);
 		} if (master.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
 			wings.set_value(false);
+		}
+
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+			lift.set_value(true);
+		}
+
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+			cata.move(85);
+
 		}
 
 		
@@ -176,11 +191,6 @@ void opcontrol() {
 			rot=(pow(abs(rot), rotexp)*-127)/pow(127, rotexp);
 		}
 
-		if (y-lasty>limit) {
-			y=lasty+limit;
-		} else if (y-lasty<-1*limit) {
-			y=lasty-limit;
-		}
 		
 		if (rot>90){
 			rot=90;
@@ -188,11 +198,6 @@ void opcontrol() {
 			rot=-90;
 		}
 
-		if (y>110){
-			y=110;
-		} else if (y<-110){
-			y=-110;
-		}
 		if (y>-3&&y<3) {
 			y=y-abs(rot)*0.2;
 		}

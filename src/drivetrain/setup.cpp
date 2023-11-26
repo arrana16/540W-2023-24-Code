@@ -4,13 +4,13 @@
 PID leftSidePID(2, 0,0, false, 0);
 PID rightSidePID(2, 0,0, false, 0);
 
-pros::Motor l1(14, pros::E_MOTOR_GEARSET_18, true);
-pros::Motor l2(15, pros::E_MOTOR_GEARSET_18, true);
-pros::Motor l3(16, pros::E_MOTOR_GEARSET_18, false);
+pros::Motor l1(15, pros::E_MOTOR_GEARSET_18, true);
+pros::Motor l2(16, pros::E_MOTOR_GEARSET_18, true);
+pros::Motor l3(17, pros::E_MOTOR_GEARSET_18, false);
 
-pros::Motor r1(17, pros::E_MOTOR_GEARSET_18, false);
-pros::Motor r2(18, pros::E_MOTOR_GEARSET_18, false);
-pros::Motor r3(19, pros::E_MOTOR_GEARSET_18, true);
+pros::Motor r1(12, pros::E_MOTOR_GEARSET_18, false);
+pros::Motor r2(13, pros::E_MOTOR_GEARSET_18, false);
+pros::Motor r3(14, pros::E_MOTOR_GEARSET_18, true);
 
 pros::MotorGroup left_side_motors({l1, l2, l3});
 pros::MotorGroup right_side_motors({r1, r2, r3});
@@ -53,9 +53,9 @@ lemlib::ChassisController_t angularController {
     3.3, // kP
     30, // kD
     0.5, // smallErrorRange
-    300, // smallErrorTimeout
+    600, // smallErrorTimeout
     3, // largeErrorRange
-    500, // largeErrorTimeout
+    800, // largeErrorTimeout
     0 // slew rate
 };
 
