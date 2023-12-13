@@ -24,11 +24,15 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
-	chassis.calibrate();
+	pros::Motor wheel(11, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+	wheel.move(-127);
+	//chassis.calibrate();
+	//autonomous();
 }
 
 /**
@@ -110,6 +114,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	/*
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 	int lasty= 0 ;
@@ -122,9 +127,15 @@ void opcontrol() {
 	pros::Imu inertial_seonsor(11);
 	pros::ADIDigitalOut wings(7, LOW);
 	pros::ADIDigitalOut lift(8, LOW);
+	*/
+
+	pros::Motor wheel(11, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 
 	while (true) {
+		wheel.move(-127);
+
+		/*
 		lemlib::Pose pose = chassis.getPose(); // get the current position of the robot
         pros::lcd::print(0, "x: %f", pose.x); // print the x position
         pros::lcd::print(1, "y: %f", pose.y); // print the y position
@@ -192,10 +203,10 @@ void opcontrol() {
 		}
 
 		
-		if (rot>90){
-			rot=90;
-		} else if (rot<-90){
-			rot=-90;
+		if (rot>100){
+			rot=100;
+		} else if (rot<-100){
+			rot=-100;
 		}
 
 		if (y>-3&&y<3) {
@@ -204,6 +215,8 @@ void opcontrol() {
 		simpleDrive(y, rot);
 
 		lasty = y;
+		*/
 		pros::delay(20);
+		
 	}
 }

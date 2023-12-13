@@ -36,11 +36,12 @@ void right_side_auto(){
     chassis.turnTo(130, 60, 600, false, 80);
     outtake();
     pros::delay(700);
-    simpleDrive(100, 0);
-    pros::delay(280);
+    simpleDrive(127, 0);
+    pros::delay(450);
     simpleDrive(-100, 0);
-    pros::delay(150);
+    pros::delay(120);
     simpleDrive(0,0);
+
     chassis.turnTo(chassis.getPose().x-30, chassis.getPose().y, 700, false, 80);
     simpleDrive(-50, 0);
     pros::delay(500);
@@ -75,7 +76,11 @@ void right_side_auto(){
 void left_side_auto(){
     pros::ADIDigitalOut wings(7);
 
-    chassis.setPose(31.5, 10.5, 180);
+    chassis.setPose(31.5, 8.5, 0);
+    cata.move(70);
+    pros::delay(300);
+    cata.move(0);
+
     chassis.moveTo(31.5, 19, 1100, 100);
 
     chassis.turnTo(14, 34, 700, false, 80);
@@ -83,20 +88,27 @@ void left_side_auto(){
     chassis.turnTo(14, 60, 400, false, 80);
     outtake();
 
-    pros::delay(200);
-    simpleDrive(100, 0);
-    pros::delay(280);
+    pros::delay(350);
+    simpleDrive(127, 0);
+    pros::delay(240);
     simpleDrive(-100, 0);
-    pros::delay(150);
+    pros::delay(200);
     simpleDrive(0,0);
     chassis.turnTo(chassis.getPose().x+30, chassis.getPose().y, 700, false, 80);
-    simpleDrive(-50, 0);
-    pros::delay(500);
+    simpleDrive(-35, 0);
+    pros::delay(850);
     simpleDrive(0,0);
 
-    chassis.setPose(7.5, 33, -90);
-    chassis.moveTo(20.4, 16, 800, 100);
+    chassis.setPose(7.5, 33, 90);
+    chassis.moveTo(26, 16, 800, 100);
     wings.set_value(true);
-    chassis.turnTo(20.4, 50, 500, false, 80);
+    pros::delay(300);
+    chassis.turnTo(50, 16, 500, false, 80);
+    wings.set_value(false);
+    pros::delay(300);
+    chassis.moveTo(35, 4, 800, 80, false);
+    chassis.turnTo(100, 4, 500, true, 80);
+    chassis.moveTo(69, 4, 2500, 40);
+
 
 }
