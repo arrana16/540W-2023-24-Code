@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -33,7 +34,7 @@ void processArray(const std::string& word, float* array, int array_size) {
 int main()
 {
     //assigns file path to be opened and analyzed
-    const std::string filePath = "carrie-test.txt";
+    const std::string filePath = "/usd/test.txt";
     std::ifstream inputFile(filePath);
 
     //read first line in the file as a string
