@@ -114,9 +114,9 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	/*
+	
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-
+	/*
 	int lasty= 0 ;
 	int limit = 2;
 	double yexp = 2.12;
@@ -129,11 +129,21 @@ void opcontrol() {
 	pros::ADIDigitalOut lift(8, LOW);
 	*/
 
-	pros::Motor wheel(11, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+	pros::Motor intake1(11, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+	pros::Motor intake2(12, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
 
 
 	while (true) {
-		wheel.move(-127);
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
+			intake1.move(127);
+			intake2.move(127);
+		} else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
+			intake1.move(-127);
+			intake2.move(-127);
+		} else {
+			intake1.move(0);
+			intake2.move(0);
+		}
 
 		/*
 		lemlib::Pose pose = chassis.getPose(); // get the current position of the robot
