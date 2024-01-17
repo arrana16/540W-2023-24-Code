@@ -31,10 +31,23 @@ void processArray(const std::string& word, float* array, int array_size) {
     }
 }
 
-int main()
-{
-    //assigns file path to be opened and analyzed
-    const std::string filePath = "/usd/test.txt";
+void setVels(float linVel, float angVel) {
+    float leftVel = linVel - (angVel*WHEELTRACK/2);
+    float rightVel = linVel - (angVel*WHEELTRACK/2);
+
+    left_side_motors.move_velocity(leftVel/MAXLINVEL*600);
+    right_side_motors.move_velocity(leftVel/MAXLINVEL*600);
+};
+void autonMovement(int time, float* array1, float* array2){ 
+    double totalRuntime = time*10; 
+    double startTime = pros::millis();
+    while((pros::millis() - startTime) < totalRuntime){
+        setVels(array1[pros::millis()/100], array2[pros::millis()/100]);
+    }
+    pros::delay(10);
+}
+
+void transform(const std::string filePath) {
     std::ifstream inputFile(filePath);
 
     //read first line in the file as a string
@@ -71,4 +84,10 @@ int main()
     processArray(secondLine, linearVelocity, instances);
     processArray(thirdLine, angularVelocity, instances);
 
+    autonMovement(instances, linearVelocity, angularVelocity);
+    }
+
+int main()
+{
+   transform("filename.txt");
 }
