@@ -38,13 +38,13 @@ void setVels(float linVel, float angVel) {
     left_side_motors.move_velocity(leftVel/MAXLINVEL*600);
     right_side_motors.move_velocity(leftVel/MAXLINVEL*600);
 };
+
 void autonMovement(int time, float* array1, float* array2){ 
     double totalRuntime = time*10; 
     double startTime = pros::millis();
     while((pros::millis() - startTime) < totalRuntime){
         setVels(array1[pros::millis()/100], array2[pros::millis()/100]);
     }
-    pros::delay(10);
 }
 
 void transform(const std::string filePath) {
@@ -86,8 +86,3 @@ void transform(const std::string filePath) {
 
     autonMovement(instances, linearVelocity, angularVelocity);
     }
-
-int main()
-{
-   transform("filename.txt");
-}
