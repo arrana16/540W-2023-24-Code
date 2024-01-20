@@ -1,8 +1,11 @@
 #include "main.h"
 
 
-PID leftSidePID(2, 0,0, false, 0);
-PID rightSidePID(2, 0,0, false, 0);
+PID leftSideFeedback(2, 0,0, false, 0);
+PID rightSideFeedback(2, 0,0, false, 0);
+
+PID leftSideFeedforward(0, 0,0, false, 0);
+PID rightSideFeedforward(0, 0,0, false, 0);
 
 pros::Motor l1(15, pros::E_MOTOR_GEARSET_18, true);
 pros::Motor l2(16, pros::E_MOTOR_GEARSET_18, true);
