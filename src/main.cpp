@@ -29,10 +29,8 @@ void initialize() {
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
-	pros::Motor wheel(11, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
-	wheel.move(-127);
 	//chassis.calibrate();
-	//autonomous();
+	autonomous();
 }
 
 /**
@@ -65,8 +63,19 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-
-	right_side_auto();
+	/*
+	chassis.setPose(0,0,0);
+	chassis.turnTo(0, 1000, 1000, true, 100);
+	*/
+setVels(10, 0);
+	//MPDrive("/usd/test-path3.txt");
+	// setVels(0, 2);
+	// pros::delay(300);
+	// setVels(0,0);
+	// setVels(0, 2);
+	// pros::delay(300);
+	// setVels(0, 0);
+	//right_side_auto();
 	/*
 	pros::ADIDigitalOut wings(8);
 
@@ -116,21 +125,17 @@ void autonomous() {
 void opcontrol() {
 	
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	/*
+	
 	int lasty= 0 ;
 	int limit = 2;
 	double yexp = 2.12;
 	double rotexp = 3.8;
 
 	bool cataShoot = true;
+	
 
-	pros::Imu inertial_seonsor(11);
-	pros::ADIDigitalOut wings(7, LOW);
-	pros::ADIDigitalOut lift(8, LOW);
-	*/
-
-	pros::Motor intake1(11, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
-	pros::Motor intake2(12, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
+	pros::Motor intake1(14, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+	pros::Motor intake2(17, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
 
 
 	while (true) {
@@ -151,6 +156,7 @@ void opcontrol() {
         pros::lcd::print(1, "y: %f", pose.y); // print the y position
         pros::lcd::print(2, "heading: %f", pose.theta);
         pros::lcd::print(3, "heading: %f", inertial_seonsor.get_heading());
+		*/
 
 		int left = master.get_analog(ANALOG_LEFT_Y);
 		int right = master.get_analog(ANALOG_RIGHT_Y);
@@ -175,13 +181,15 @@ void opcontrol() {
 			hold();
 		};
 
-
+		/*
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)&&true){
 			shoot();
 		} else {
 			cata.move(0);
 		}
+		*/
 		
+		/*
 
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
 			wings.set_value(true);
@@ -197,6 +205,7 @@ void opcontrol() {
 			cata.move(85);
 
 		}
+		*/
 
 		
 
@@ -225,7 +234,7 @@ void opcontrol() {
 		simpleDrive(y, rot);
 
 		lasty = y;
-		*/
+		
 		pros::delay(20);
 		
 	}

@@ -45,16 +45,20 @@ void processArray(const string& word, float* array, int array_size) {
 
 void setVels(float linVel, float angVel) {
     double leftTarget = (linVel - (angVel*WHEELTRACK/2)) * 600/MAXLINVEL;
-    double rightTarget = (linVel - (angVel*WHEELTRACK/2)) * 600/MAXLINVEL;
+    double rightTarget = (linVel + (angVel*WHEELTRACK/2)) * 600/MAXLINVEL;
 
     double leftCurrent = (l1.get_actual_velocity()+l2.get_actual_velocity())/2;
     double rightCurrent = (r1.get_actual_velocity()+r2.get_actual_velocity())/2;
 
-    double leftSideDrive = leftSideFeedback.calculate(leftTarget, leftCurrent);
-    double rightSideDrive = rightSideFeedback.calculate(rightTarget, rightCurrent);
+    double leftBase = (linVel - (angVel*WHEELTRACK/2)) * 12000/MAXLINVEL;
+    double rightBase = (linVel - (angVel*WHEELTRACK/2)) * 12000/MAXLINVEL;
 
-    left_side_motors.move_velocity(leftTarget/MAXLINVEL*600);
-    right_side_motors.move_velocity(rightTarget/MAXLINVEL*600);
+    int leftSideDrive = leftSideFeedback.calculate(leftTarget, leftCurrent)+leftBase;
+    int rightSideDrive = rightSideFeedback.calculate(rightTarget, rightCurrent)+rightBase;
+
+
+   left_side_motors.move_voltage(leftSideDrive);
+   right_side_motors.move_velocity(rightSideDrive);
 };
 
 void autonMovement(int time, float* array1, float* array2){ 
@@ -103,4 +107,17 @@ void MPDrive(const string filePath) {
     processArray(thirdLine, angularVelocity, instances);
 
     autonMovement(instances, linearVelocity, angularVelocity);
+
 }
+/*
+
+void actualComp(){
+     pros::Motor motor (1);
+  while (true) {
+    motor = controller_get_analog(E_CONTROLLER_MASTER, E_CONTROLLER_ANALOG_LEFT_Y);
+    printf("Actual velocity: %lf\n", motor.get_actual_velocity());
+    pros::delay(2);
+  }
+
+}
+*/

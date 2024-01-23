@@ -1,26 +1,24 @@
 #include "main.h"
 
 
-PID leftSideFeedback(2, 0,0, false, 0);
-PID rightSideFeedback(2, 0,0, false, 0);
+PID leftSideFeedback(20, 0,0, false, 0);
+PID rightSideFeedback(20, 0,0, false, 0);
 
-PID leftSideFeedforward(0, 0,0, false, 0);
-PID rightSideFeedforward(0, 0,0, false, 0);
 
-pros::Motor l1(15, pros::E_MOTOR_GEARSET_18, true);
-pros::Motor l2(16, pros::E_MOTOR_GEARSET_18, true);
-pros::Motor l3(17, pros::E_MOTOR_GEARSET_18, false);
+pros::Motor l1(20, pros::E_MOTOR_GEARSET_18, true);
+pros::Motor l2(19, pros::E_MOTOR_GEARSET_18, true);
+pros::Motor l3(18, pros::E_MOTOR_GEARSET_18, false);
 
-pros::Motor r1(12, pros::E_MOTOR_GEARSET_18, false);
-pros::Motor r2(13, pros::E_MOTOR_GEARSET_18, false);
-pros::Motor r3(14, pros::E_MOTOR_GEARSET_18, true);
+pros::Motor r1(11, pros::E_MOTOR_GEARSET_18, false);
+pros::Motor r2(12, pros::E_MOTOR_GEARSET_18, false);
+pros::Motor r3(13, pros::E_MOTOR_GEARSET_18, true);
 
 pros::MotorGroup left_side_motors({l1, l2, l3});
 pros::MotorGroup right_side_motors({r1, r2, r3});
 
-pros::ADIEncoder xEnc(1, 2, true);
-pros::ADIEncoder yEnc(3, 4, true);
-pros::Imu inertial_seonsor(11);
+// pros::ADIEncoder xEnc(1, 2, true);
+// pros::ADIEncoder yEnc(3, 4, true);
+pros::Imu inertial_seonsor(5);
 
 lemlib::TrackingWheel left_side_enc(&left_side_motors, 3.25, -5.5, 450);
 lemlib::TrackingWheel right_side_enc(&right_side_motors, 3.25, 5.5, 450);
@@ -28,7 +26,7 @@ lemlib::TrackingWheel right_side_enc(&right_side_motors, 3.25, 5.5, 450);
 lemlib::Drivetrain_t drivetrain {
     &left_side_motors,
     &right_side_motors,
-    10,
+    10.5,
     3.25,
     450
 };
@@ -42,8 +40,8 @@ lemlib::OdomSensors_t sensors {
 
 };
 lemlib::ChassisController_t lateralController {
-    3.5, // kP
-    0, // kD
+    4.5, // kP
+    20, // kD
     0.05, // smallErrorRange
     400, // smallErrorTimeout
     0.3, // largeErrorRange
@@ -53,13 +51,13 @@ lemlib::ChassisController_t lateralController {
  
 // turning PID
 lemlib::ChassisController_t angularController {
-    3.3, // kP
-    30, // kD
-    0.5, // smallErrorRange
+    7.9, // kP
+    90, // kD
+    1.5, // smallErrorRange
     600, // smallErrorTimeout
     3, // largeErrorRange
     800, // largeErrorTimeout
-    0 // slew rate
+    10 // slew rate
 };
 
 lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensors);
