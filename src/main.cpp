@@ -29,8 +29,8 @@ void initialize() {
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
-	//chassis.calibrate();
-	autonomous();
+	chassis.calibrate();
+	//autonomous();
 }
 
 /**
@@ -67,8 +67,55 @@ void autonomous() {
 	chassis.setPose(0,0,0);
 	chassis.turnTo(0, 1000, 1000, true, 100);
 	*/
-setVels(10, 0);
-	//MPDrive("/usd/test-path3.txt");
+	//MPDrive("/usd/long-path.txt");
+	chassis.setPose(108, 12, 0);
+	intake();
+	chassis.moveTo(98, 72, 2000, 200);
+	pros::delay(50);
+	hold();
+	chassis.turnTo(10000, 72, 1000, false, 100);
+	pros::delay(50);
+	outtake();
+	pros::delay(200);
+	chassis.turnTo(0, 72, 1000, false, 100);
+	intake();
+	chassis.moveTo(80, 83, 1000, 200);
+	chassis.turnTo(10000, 80, 1000, false, 100);
+	outtake();
+	pros::delay(50);
+	simpleDrive(127, 0);
+	pros::delay(800);
+	simpleDrive(0, 0);
+	chassis.setPose(114, 80, chassis.getPose().theta);
+	chassis.moveTo(100, 80, 1000, 100);
+	chassis.turnTo(80.5, 51.5, 1000,false, 100);
+	intake();
+	chassis.moveTo(82.5, 51.5, 1000, 170);
+	pros::delay(150);
+	simpleDrive(-100, 0);
+	pros::delay(450);
+	simpleDrive(0, 0);
+	chassis.turnTo(10000, chassis.getPose().y, 1000, false, 100);
+	outtake();
+	pros::delay(150);
+	simpleDrive(110, 0);
+	pros::delay(500);
+	simpleDrive(0, 0);
+
+	chassis.setPose(112, 62, chassis.getPose().theta, false);
+	chassis.moveTo(102, 62, 1000, 100);
+	chassis.turnTo(102, 0, 1000, false, 100);
+	intake();
+	chassis.follow("farSide1.txt", 3000, 15);
+	pros::delay(50);
+	hold();
+	chassis.moveTo(109, 12, 1000, 100);
+
+	chassis.turnTo(139, 42, 1000, false, 100);
+	chassis.follow("farSide2.txt", 3000, 15);
+
+
+	//chassis.follow("closeSide1.txt", 3000, 15);
 	// setVels(0, 2);
 	// pros::delay(300);
 	// setVels(0,0);

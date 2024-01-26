@@ -44,29 +44,30 @@ void processArray(const string& word, float* array, int array_size) {
 }
 
 void setVels(float linVel, float angVel) {
-    double leftTarget = (linVel - (angVel*WHEELTRACK/2)) * 600/MAXLINVEL;
-    double rightTarget = (linVel + (angVel*WHEELTRACK/2)) * 600/MAXLINVEL;
+    double leftTarget = (linVel + (angVel*WHEELTRACK/2)) * 600/MAXLINVEL;
+    double rightTarget = (linVel - (angVel*WHEELTRACK/2)) * 600/MAXLINVEL;
 
     double leftCurrent = (l1.get_actual_velocity()+l2.get_actual_velocity())/2;
     double rightCurrent = (r1.get_actual_velocity()+r2.get_actual_velocity())/2;
 
-    double leftBase = (linVel - (angVel*WHEELTRACK/2)) * 12000/MAXLINVEL;
+    double leftBase = (linVel + (angVel*WHEELTRACK/2)) * 12000/MAXLINVEL;
     double rightBase = (linVel - (angVel*WHEELTRACK/2)) * 12000/MAXLINVEL;
 
-    int leftSideDrive = leftSideFeedback.calculate(leftTarget, leftCurrent)+leftBase;
-    int rightSideDrive = rightSideFeedback.calculate(rightTarget, rightCurrent)+rightBase;
+    double leftSideDrive = leftSideFeedback.calculate(leftTarget, leftCurrent)+leftBase;
+    double rightSideDrive = rightSideFeedback.calculate(rightTarget, rightCurrent)+rightBase;
 
 
    left_side_motors.move_voltage(leftSideDrive);
-   right_side_motors.move_velocity(rightSideDrive);
+   right_side_motors.move_voltage(rightSideDrive);
 };
 
 void autonMovement(int time, float* array1, float* array2){ 
-    double totalRuntime = time*10; 
-    double startTime = pros::millis();
+    int totalRuntime = time*10; 
+    int startTime = pros::millis();
     while((pros::millis() - startTime) < totalRuntime){
-        setVels(array1[pros::millis()/100], array2[pros::millis()/100]);
+        setVels(array1[(pros::millis()-startTime)/10], array2[(pros::millis()-startTime)/10]);
     }
+    setVels(0, 0);  
 }
 
 void MPDrive(const string filePath) {

@@ -1,8 +1,8 @@
 #include "main.h"
 
 
-PID leftSideFeedback(20, 0,0, false, 0);
-PID rightSideFeedback(20, 0,0, false, 0);
+PID leftSideFeedback(0, 0,0, false, 0);
+PID rightSideFeedback(0, 0,0, false, 0);
 
 
 pros::Motor l1(20, pros::E_MOTOR_GEARSET_18, true);
@@ -18,7 +18,7 @@ pros::MotorGroup right_side_motors({r1, r2, r3});
 
 // pros::ADIEncoder xEnc(1, 2, true);
 // pros::ADIEncoder yEnc(3, 4, true);
-pros::Imu inertial_seonsor(5);
+pros::Imu inertial_seonsor(6);
 
 lemlib::TrackingWheel left_side_enc(&left_side_motors, 3.25, -5.5, 450);
 lemlib::TrackingWheel right_side_enc(&right_side_motors, 3.25, 5.5, 450);
@@ -40,7 +40,7 @@ lemlib::OdomSensors_t sensors {
 
 };
 lemlib::ChassisController_t lateralController {
-    4.5, // kP
+    4.7, // kP
     20, // kD
     0.05, // smallErrorRange
     400, // smallErrorTimeout
