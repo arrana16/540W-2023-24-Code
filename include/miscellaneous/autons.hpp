@@ -1,5 +1,5 @@
 #include "main.h"
 
 extern void skills();
-extern void right_side_auto();
-extern void left_side_auto();
+extern void far_side_auto();
+extern void close_side_auto();

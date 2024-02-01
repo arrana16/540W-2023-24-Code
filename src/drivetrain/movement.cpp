@@ -19,6 +19,11 @@ void simpleDrive(int y, int turn) {
     right_side_motors.move(y - turn);
 }
 
+void PTODrive(int y, int turn){
+    left_PTO.move(y+turn);
+    right_PTO.move(y-turn);
+}
+
 
 void processArray(const string& word, float* array, int array_size) {
     string temp = "";

@@ -1,8 +1,8 @@
 #include "main.h"
 
 void intake(){
-    intake1.move(80);
-    intake2.move(80);
+    intake1.move(127);
+    intake2.move(127);
 }
 
 void outtake(){
@@ -16,5 +16,6 @@ void posess(){
 
 void hold(){
     intake1.move(0);
+    intake2.move(0);
 }
 

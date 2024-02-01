@@ -16,6 +16,9 @@ pros::Motor r3(13, pros::E_MOTOR_GEARSET_18, true);
 pros::MotorGroup left_side_motors({l1, l2, l3});
 pros::MotorGroup right_side_motors({r1, r2, r3});
 
+pros::MotorGroup left_PTO({l1 ,l2});
+pros::MotorGroup right_PTO({r1, r2});
+
 // pros::ADIEncoder xEnc(1, 2, true);
 // pros::ADIEncoder yEnc(3, 4, true);
 pros::Imu inertial_seonsor(6);

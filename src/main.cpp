@@ -30,7 +30,7 @@ void initialize() {
 
 	pros::lcd::register_btn1_cb(on_center_button);
 	chassis.calibrate();
-	//autonomous();
+	autonomous();
 }
 
 /**
@@ -63,49 +63,77 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
+	LED.set_value(true);
+	far_side_auto();
 	/*
 	chassis.setPose(0,0,0);
 	chassis.turnTo(0, 1000, 1000, true, 100);
 	*/
 	//MPDrive("/usd/long-path.txt");
+
+	//far-side auton
+	/*
+	pros::Task task{[=] {
+			intake1.move(-30);
+			intake2.move(-30);
+			pros::delay(300);
+			pros::delay(500);
+			intake();
+    }};
 	chassis.setPose(108, 12, 0);
-	intake();
-	chassis.moveTo(98, 72, 2000, 200);
+	chassis.moveTo(98, 72, 1550, 200);
 	pros::delay(50);
 	hold();
-	chassis.turnTo(10000, 72, 1000, false, 100);
+	chassis.turnTo(10000, 72, 600, false, 100);
 	pros::delay(50);
 	outtake();
-	pros::delay(200);
-	chassis.turnTo(0, 72, 1000, false, 100);
-	intake();
-	chassis.moveTo(80, 83, 1000, 200);
-	chassis.turnTo(10000, 80, 1000, false, 100);
+	pros::delay(150);
+	chassis.turnTo(80, 75, 600, false, 100);
+	intake1.move(30);
+	intake2.move(30);
+	chassis.moveTo(80, 75, 750, 200);
+	hold();
+	chassis.turnTo(10000, 80, 700, false, 100);
 	outtake();
-	pros::delay(50);
+	pros::delay(150);
 	simpleDrive(127, 0);
 	pros::delay(800);
 	simpleDrive(0, 0);
 	chassis.setPose(114, 80, chassis.getPose().theta);
-	chassis.moveTo(100, 80, 1000, 100);
-	chassis.turnTo(80.5, 51.5, 1000,false, 100);
+	chassis.moveTo(100, 80, 700, 150);
+	chassis.turnTo(82, 60, 450, false, 100);
 	intake();
-	chassis.moveTo(82.5, 51.5, 1000, 170);
+	chassis.moveTo(82, 60, 900, 170);
 	pros::delay(150);
 	simpleDrive(-100, 0);
 	pros::delay(450);
 	simpleDrive(0, 0);
-	chassis.turnTo(10000, chassis.getPose().y, 1000, false, 100);
+	chassis.turnTo(10000, chassis.getPose().y, 600, false, 100);
 	outtake();
 	pros::delay(150);
 	simpleDrive(110, 0);
 	pros::delay(500);
 	simpleDrive(0, 0);
+	*/
 
-	chassis.setPose(112, 62, chassis.getPose().theta, false);
-	chassis.moveTo(102, 62, 1000, 100);
-	chassis.turnTo(102, 0, 1000, false, 100);
+	/*
+	chassis.setPose(111, 73, chassis.getPose().theta, false);
+	chassis.moveTo(105, 73, 500, 100);
 	intake();
+	chassis.moveTo(105, 12, 1750, 200);
+	chassis.turnTo(77.5, 12, 550, false, 100);
+	chassis.moveTo(79, 12, 1100, 200);
+	pros::delay(100);
+	hold();
+	chassis.moveTo(110, 15, 1000, 200);
+	chassis.turnTo(140, 60, 650, false, 100);
+	chassis.moveTo(130, 35, 950, 200);
+	chassis.turnTo(132, 80, 200, false, 100);
+	outtake();
+	pros::delay(200);
+	simpleDrive(127, 0);
+	*/
+	/*
 	chassis.follow("farSide1.txt", 3000, 15);
 	pros::delay(50);
 	hold();
@@ -113,6 +141,7 @@ void autonomous() {
 
 	chassis.turnTo(139, 42, 1000, false, 100);
 	chassis.follow("farSide2.txt", 3000, 15);
+	*/
 
 
 	//chassis.follow("closeSide1.txt", 3000, 15);
@@ -170,32 +199,22 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	
+	//267, 186
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
+	pros::Motor flywheel(15);
 	
 	int lasty= 0 ;
 	int limit = 2;
 	double yexp = 2.12;
 	double rotexp = 3.8;
+	bool PTO = false;
+	int liftAngle = 186;
 
-	bool cataShoot = true;
-	
-
-	pros::Motor intake1(14, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
-	pros::Motor intake2(17, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
+	bool flywheelRun = true;
 
 
 	while (true) {
-		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
-			intake1.move(127);
-			intake2.move(127);
-		} else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
-			intake1.move(-127);
-			intake2.move(-127);
-		} else {
-			intake1.move(0);
-			intake2.move(0);
-		}
+		
 
 		/*
 		lemlib::Pose pose = chassis.getPose(); // get the current position of the robot
@@ -204,7 +223,9 @@ void opcontrol() {
         pros::lcd::print(2, "heading: %f", pose.theta);
         pros::lcd::print(3, "heading: %f", inertial_seonsor.get_heading());
 		*/
-
+		printf("%d \n", liftRot.get_angle()/100);
+		flyWheelSpin(2700);
+		
 		int left = master.get_analog(ANALOG_LEFT_Y);
 		int right = master.get_analog(ANALOG_RIGHT_Y);
 
@@ -223,10 +244,22 @@ void opcontrol() {
 			hold();
 		};
 
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
+			liftAngle = 265;
+			lift.set_value(true);
+			PTO=true;
+		} else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+			liftAngle = 186;
+		}
 
-		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
-			hold();
-		};
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)){
+			lift.set_value(false);
+			PTO = false;
+		}
+
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)){
+			liftAngle = 230;
+		} 
 
 		/*
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)&&true){
@@ -236,7 +269,7 @@ void opcontrol() {
 		}
 		*/
 		
-		/*
+		
 
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
 			wings.set_value(true);
@@ -244,6 +277,18 @@ void opcontrol() {
 			wings.set_value(false);
 		}
 
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)){
+			flywheelRun = true;
+		} else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)){
+			flywheelRun = false;
+		}
+
+		if (flywheelRun){
+			flyWheelSpin(2800);
+		} else {
+			flywheel.move_voltage(0);
+		}
+	/*
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
 			lift.set_value(true);
 		}
@@ -278,7 +323,13 @@ void opcontrol() {
 		if (y>-3&&y<3) {
 			y=y-abs(rot)*0.2;
 		}
-		simpleDrive(y, rot);
+
+		if (PTO){
+			PTODrive(y, rot);
+			liftMove(liftAngle);
+		} else {
+			simpleDrive(y, rot);
+		}
 
 		lasty = y;
 		

@@ -1,97 +1,180 @@
 #include "main.h"
+#include "okapi/api/control/util/flywheelSimulator.hpp"
 
 void skills() {
-    pros::ADIDigitalOut wings(7);
+    chassis.setPose(38, 10, 0);
+    outtake();
+    chassis.moveTo(9 ,32, 1300, 200);
+    chassis.turnTo(9, 90, 1000, false, 100);
+    
+    simpleDrive(127, 0);
+    pros::delay(500);
+    simpleDrive(0, 0);
 
-	chassis.setPose(25.2, 12, -120);
-	
-    cata.move(100);
+    chassis.moveTo(12, 29, 1000, 200);
+    chassis.turnTo(144, 72, 500, false, 100);
+    lift.set_value(true);
+    PTODrive(-50,0);
+    pros::delay(700);
+    PTODrive(0,0);
 
-    pros::delay(30000);
-    cata.move(0);
-	chassis.moveTo(30.4, 13, 2000, 70);
-	chassis.moveTo(42, 6, 2000, 70);
+    pros::Task task{[=] {
+        int startTime = pros::c::millis();
+        while (pros::c::millis()-startTime<45000){
+            flyWheelSpin(-2750);
+            liftMove(237);
+        }
+        flyWheelStop();
+    }};
 
-	//chassis.turnTo(90, 0, 6000, false, 70);
-	chassis.moveTo(110, 6, 2000, 90);
+    pros::delay(45000);
+    lift.set_value(false);
 
-	chassis.moveTo(110, 33, 2000, 90);
-	chassis.moveTo(85, 72, 2000, 90);
-	chassis.turnTo(chassis.getPose().x+26, chassis.getPose().y, 2000, false, 90);
+    /*
+    simpleDrive(50, 0);
+    pros::delay(450);
+    simpleDrive(0,0);
+    chassis.moveTo(36, 10, 1200, 200);
+    chassis.turnTo(115, 10, 5000, true, 100);
+    chassis.moveTo(115, 40, 5000, 200);
+    chassis.moveTo(90, 56, 1500, 200);
+    chassis.turnTo(144, 72, 500);
+    wings.set_value(true);
+    simpleDrive(127, 0);
+    pros::delay(1500);
+    simpleDrive(-50, 0);
+    pros::delay(300);
+    wings.set_value(false);
+    simpleDrive(0,0);
+    chassis.turnTo(1000, chassis.getPose().y, 500, false, 100);
+    simpleDrive(-100, 0);
+    pros::delay(400);
+    simpleDrive(0, 0);
+
+    chassis.setPose(84, 64, 0, false);
+    chassis.moveTo(90, 90, 1000, 200);
+
+    chassis.turnTo(144, 72, 500, false, 100);
+    wings.set_value(true);
+    simpleDrive(127, 0);
+    pros::delay(1500);
+    simpleDrive(-30, 0);
+    pros::delay(200);
+    simpleDrive(0,0);
+    wings.set_value(false);
+
+    */
+
+}
+
+void far_side_auto(){
+    /*
+    pros::Task task{[=] {
+			intake1.move(-30);
+			intake2.move(-30);
+			pros::delay(300);
+			pros::delay(500);
+			intake();
+    }};
+    */
+	chassis.setPose(108, 12, 0);
+	chassis.moveTo(108, 57, 1200, 200);
+	pros::delay(50);
+	hold();
+	chassis.turnTo(10000, 57, 600, false, 100);
+    outtake();;
+    pros::delay(150);
+    intake();
+    chassis.turnTo(98, 72, 350, false, 100);
+    chassis.moveTo(98, 72, 800, 100);
+    chassis.turnTo(10000, 72, 600, false, 100);
+	outtake();
+	pros::delay(150);
+	chassis.turnTo(80, 75, 600, false, 100);
+	intake1.move(100);
+	intake2.move(100);
+	chassis.moveTo(78, 75, 750, 200);
+	hold();
+	chassis.turnTo(10000, 80, 700, false, 100);
+	outtake();
+	pros::delay(150);
+    chassis.moveTo(300, 80, 900,200);
+	chassis.setPose(114, 80, chassis.getPose().theta);
+	chassis.moveTo(100, 80, 700, 150);
+	chassis.turnTo(82, 60, 450, false, 100);
+	intake();
+	chassis.moveTo(82, 60, 900, 170);
+	pros::delay(150);
 	simpleDrive(-100, 0);
+	pros::delay(450);
+	simpleDrive(0, 0);
+	chassis.turnTo(10000, chassis.getPose().y, 600, false, 100);
+	outtake();
+    wings.set_value(true);
+	pros::delay(150);
+	simpleDrive(110, 0);
 	pros::delay(500);
 	simpleDrive(0, 0);
-	chassis.setPose(82, 72, 90);
-	wings.set_value(true);
-	chassis.moveTo(112, 72, 2000, 120);
-}
+    wings.set_value(false);
 
-void right_side_auto(){
-    pros::ADIDigitalOut wings(7);
-    chassis.setPose(112.5, 8.5, 0);
+	
+	chassis.setPose(111, 72, chassis.getPose().theta, false);
+	chassis.moveTo(100, 72, 500, 100);
+	intake();
+	chassis.moveTo(105, 14, 1750, 200);
 
-    chassis.moveTo(112.5, 19, 1100, 150);
-    chassis.turnTo(130, 34, 700, false, 80);
-    chassis.moveTo(130, 34, 800, 80, false);
-    chassis.turnTo(130, 60, 600, false, 80);
-    outtake();
-    pros::delay(700);
-    simpleDrive(127, 0);
-    pros::delay(450);
-    simpleDrive(-100, 0);
-    pros::delay(120);
-    simpleDrive(0,0);
-
-    chassis.turnTo(chassis.getPose().x-30, chassis.getPose().y, 700, false, 80);
-    simpleDrive(-50, 0);
-    pros::delay(500);
-    simpleDrive(0,0);
-
-    chassis.setPose(136.5, 33, -90);
-    intake1.move(60);
-    chassis.moveTo(77, 40.5, 2000, 100);
-    intake1.move(0);
-    chassis.moveTo(97.4, 38.4, 700, 80);
-    chassis.turnTo(120, 72, 500, false, 80);
-    outtake();
-    pros::delay(400);
-    intake1.move(60);
-    chassis.moveTo(77, 61, 1000, 80);
-    pros::delay(400);
-    intake1.move(0);
-    chassis.moveTo(82, 72, 200, 80);
-
-    chassis.turnTo(chassis.getPose().x+80, chassis.getPose().y, 2000, false, 70);
-    outtake();
-    wings.set_value(true);
-    pros::delay(300);
-    simpleDrive(90,0);
-    pros::delay(800);
-    simpleDrive(-30,0);
-    pros::delay(100);
-    simpleDrive(0,0);
+	chassis.turnTo(76.5, 14, 550, false, 100);
+	chassis.moveTo(80, 12, 1100, 200);
+	pros::delay(100);
+	hold();
+    
+    /*
+	chassis.moveTo(110, 15, 1000, 200);
+	chassis.turnTo(140, 60, 650, false, 100);
+	chassis.moveTo(130, 35, 950, 200);
+	chassis.turnTo(132, 80, 200, false, 100);
+	outtake();
+	pros::delay(200);
+	simpleDrive(127, 0);
+	*/
 
 }
 
-void left_side_auto(){
-    pros::ADIDigitalOut wings(7);
-
+void close_side_auto(){
     chassis.setPose(31.5, 8.5, 0);
-    cata.move(70);
-    pros::delay(300);
-    cata.move(0);
+    outtake();
+    pros::delay(250);
+    hold();
 
     chassis.moveTo(31.5, 19, 1100, 100);
 
-    chassis.turnTo(14, 34, 700, false, 80);
-    chassis.moveTo(14, 34, 800, 80, false);
-    chassis.turnTo(14, 60, 400, false, 80);
+    chassis.turnTo(10, 34, 700, false, 80);
+    chassis.moveTo(10, 34, 800, 80, false);
+    chassis.turnTo(10, 60, 400, false, 80);
     outtake();
 
     pros::delay(350);
     simpleDrive(127, 0);
-    pros::delay(240);
+    pros::delay(900);
+    simpleDrive(-80,0);
+    pros::delay(300);
+    simpleDrive(0,0);
+    chassis.turnTo(1000, chassis.getPose().y, 500, false, 80);
     simpleDrive(-100, 0);
+    pros::delay(700);
+    simpleDrive(0, 0);
+    chassis.setPose(7.5, 37, 90);
+    chassis.moveTo(24, 16, 800, 100);
+    vWing.set_value(true); 
+    chassis.turnTo(50, 50, 500, false, 80);
+    vWing.set_value(false);
+    pros::delay(1000);
+    chassis.moveTo(35, 16, 2000, 90);   
+    outtake();
+    chassis.moveTo(56, 16, 1000, 100);
+    pros::delay(300);
+
+    /*
     pros::delay(200);
     simpleDrive(0,0);
     chassis.turnTo(chassis.getPose().x+30, chassis.getPose().y, 700, false, 80);
@@ -109,6 +192,6 @@ void left_side_auto(){
     chassis.moveTo(35, 4, 800, 80, false);
     chassis.turnTo(100, 4, 500, true, 80);
     chassis.moveTo(69, 4, 2500, 40);
-
+    */
 
 }
