@@ -45,9 +45,8 @@
 #include "intake/functions.hpp"
 #include "catapult/setup.h"
 #include "miscellaneous/autons.hpp"
-#include "lift/lift.hpp"
 #include "flywheel/flywheel.hpp"
-
+#include "lift+wings/setup.hpp"
 
 
 /**

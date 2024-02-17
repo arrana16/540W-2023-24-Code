@@ -1,21 +1,23 @@
+// This file contains the implementation of intake functions.
+
 #include "main.h"
 
-void intake(){
+// Function to intake the object
+void intake() {
     intake1.move(127);
-    intake2.move(127);
 }
 
-void outtake(){
+// Function to outtake the object
+void outtake() {
     intake1.move(-127);
-    intake2.move(-127);
 }
 
-void posess(){
+// Function to possess the object
+void possess() {
     intake1.move(50);
 }
 
-void hold(){
+// Function to hold the intake
+void hold() {
     intake1.move(0);
-    intake2.move(0);
 }
-
